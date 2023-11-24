@@ -7,7 +7,7 @@ plugins {
 korge {
 	id = "com.sample.demo"
 
-// To enable all targets at once
+// To esnable all targets at once
 
 	//targetAll()
 

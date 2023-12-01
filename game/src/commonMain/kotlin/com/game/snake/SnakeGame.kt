@@ -19,16 +19,12 @@ class SnakeGame(context: Context) : com.lehaine.littlekt.Game<Scene>(context) {
         val camera = viewport.camera
         val batch = SpriteBatch(this)
 
-        val background: Texture = resourcesVfs["back.png"].readTexture()
         val snakeTexture: Texture = resourcesVfs["snake.png"].readTexture()
         val snakeHead: Texture = resourcesVfs["head.png"].readTexture()
-        val mapLoader = resourcesVfs["level1.ldtk"].readLDtkMapLoader()
-        val ldtkLevel = mapLoader.loadLevel(levelIdx = 0)
-        val level = GameLevel(ldtkLevel)
-
-        val snake = SnakeEntity(arrayListOf(Vec2i(0, 3), Vec2i(1, 3),
-            Vec2i(2, 3), Vec2i(3, 3), Vec2i(4, 3)),
-                                snakeTexture, snakeHead, level)
+        val levels = Levels(resourcesVfs)
+        levels.prepareLevels()
+        val level = levels.get(0)
+        val snake = SnakeEntity(level.getSnakeSpawn(0), snakeTexture, snakeHead, level)
 
 
         input.inputProcessor {
@@ -58,8 +54,8 @@ class SnakeGame(context: Context) : com.lehaine.littlekt.Game<Scene>(context) {
             gl.clear(ClearBufferMask.COLOR_BUFFER_BIT)
             snake.update()
             batch.use(camera.viewProjection) {
-                it.draw(background,  x = 0f, y = 0f)
-                ldtkLevel.render(it, camera)
+                level.level.render(it, camera)
+                //level.background.render(it, camera)
                 snake.render(it)
             }
         }

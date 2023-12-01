@@ -23,9 +23,10 @@ class SnakeEntity(snakeBody: ArrayList<Vec2i>, tailTexture: Texture, headTexture
     }
 
     fun update() {
-        for (e in snakeBody)
-            if (level.isColliding(Vec2i(e.x, e.y + 1)))
+        snakeBody.forEach {
+            if (level.isColliding(Vec2i(it.x, it.y + 1)))
                 return
+        }
         for (i in 0..<snakeBody.size)
             snakeBody[i] = Vec2i(snakeBody[i].x, snakeBody[i].y + 1)
     }

@@ -55,7 +55,6 @@ class SnakeGame(context: Context) : com.lehaine.littlekt.Game<Scene>(context) {
             snake.update()
             batch.use(camera.viewProjection) {
                 level.level.render(it, camera)
-                //level.background.render(it, camera)
                 snake.render(it)
             }
         }

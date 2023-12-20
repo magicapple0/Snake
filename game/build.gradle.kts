@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.KotlinJsCompilerType
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
-
 repositories {
     mavenCentral()
     maven(url = "https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")
@@ -8,11 +5,9 @@ repositories {
 
 plugins {
     kotlin("multiplatform")
-    id("com.android.application")
 }
 
 kotlin {
-    androidTarget()
     jvm {
         compilations {
             val main by getting
@@ -56,67 +51,18 @@ kotlin {
             useJUnit()
         }
     }
-    js(KotlinJsCompilerType.IR) {
-        binaries.executable()
-        browser {
-            testTask {
-                useKarma {
-                    useChromeHeadless()
-                }
-            }
-        }
-
-        this.attributes.attribute(
-            KotlinPlatformType.attribute,
-            KotlinPlatformType.js
-        )
-
-        compilations.all {
-            kotlinOptions.sourceMap = true
-        }
-    }
 
     sourceSets {
         val commonMain by getting {
             dependencies {
                 implementation(libs.littlekt.core)
                 implementation(libs.kotlinx.coroutines.core)
-            }
-        }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
+                implementation(libs.ktor.server.core)
+                implementation(libs.ktor.server.netty)
             }
         }
         val jvmMain by getting
-        val jvmTest by getting
-        val jsMain by getting {
-            dependencies {
-                implementation(libs.kotlinx.html.js)
-            }
-        }
-        val jsTest by getting
-        val androidMain by getting
+        //val serverMain by getting
     }
 }
 
-android {
-    sourceSets["main"].apply {
-        manifest.srcFile("src/androidMain/AndroidManifest.xml")
-        assets.srcDirs("src/commonMain/resources")
-    }
-    compileSdk = (findProperty("android.compileSdk") as String).toInt()
-
-    defaultConfig {
-        minSdk = (findProperty("android.minSdk") as String).toInt()
-        targetSdk = (findProperty("android.targetSdk") as String).toInt()
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-}
-
-rootProject.extensions.configure<org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension> {
-    versions.webpackCli.version = "4.10.0"
-}

@@ -1,7 +1,6 @@
 package com.game.snake
 
 import com.lehaine.littlekt.*
-import com.lehaine.littlekt.file.vfs.readLDtkMapLoader
 import com.lehaine.littlekt.file.vfs.readTexture
 import com.lehaine.littlekt.graphics.Color
 import com.lehaine.littlekt.graphics.Texture
@@ -9,10 +8,9 @@ import com.lehaine.littlekt.graphics.g2d.SpriteBatch
 import com.lehaine.littlekt.graphics.g2d.use
 import com.lehaine.littlekt.graphics.gl.ClearBufferMask
 import com.lehaine.littlekt.input.Key
-import com.lehaine.littlekt.math.Vec2i
 import com.lehaine.littlekt.util.viewport.ExtendViewport
 
-class SnakeGame(context: Context) : com.lehaine.littlekt.Game<Scene>(context) {
+class SnakeGame(context: Context) : Game<Scene>(context) {
 
     override suspend fun Context.start() {
         val viewport = ExtendViewport(368, 256)

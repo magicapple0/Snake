@@ -1,4 +1,4 @@
-package com.game.snake
+package com.game.server
 
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -15,3 +15,5 @@ fun main() {
         }
     }.start(wait = true)
 }
+
+

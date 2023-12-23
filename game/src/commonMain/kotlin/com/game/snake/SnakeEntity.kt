@@ -1,11 +1,13 @@
 package com.game.snake
 
+import com.lehaine.littlekt.file.vfs.readLDtkMapLoader
 import com.lehaine.littlekt.graphics.Texture
 import com.lehaine.littlekt.graphics.g2d.Batch
 import com.lehaine.littlekt.math.Vec2i
 import com.lehaine.littlekt.math.geom.Angle
 
-class SnakeEntity(snakeBody: ArrayList<Vec2i>, tailTexture: Texture, headTexture: Texture, level: GameLevel) {
+class SnakeEntity(id: Int, levelId: Int){//, snakeBody: ArrayList<Vec2i>, tailTexture: Texture, headTexture: Texture, level: GameLevel) {
+    private val id: Int
     private val tailTexture: Texture
     private val headTexture: Texture
     //from end to head
@@ -16,10 +18,11 @@ class SnakeEntity(snakeBody: ArrayList<Vec2i>, tailTexture: Texture, headTexture
     private val level: GameLevel
 
     init{
-        this.level = level
-        this.tailTexture = tailTexture
-        this.headTexture = headTexture
-        this.snakeBody = snakeBody
+        this.id = id
+        this.level = GameLevel(ResourceManager.world["Level_0"])
+        this.tailTexture = ResourceManager.tailTexture
+        this.headTexture = ResourceManager.headTexture
+        this.snakeBody = level.getSnakeSpawn(id)
     }
 
     fun update() {

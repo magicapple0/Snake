@@ -12,7 +12,7 @@ class Levels(vfsFile: VfsFile) {
     }
 
     suspend fun prepareLevels(){
-        levels.add(GameLevel(vfsFile["world.ldtk"].readLDtkMapLoader().loadMap(loadAllLevels = true)["Level_0"]))
+        levels.add(GameLevel(ResourceManager.world["Level_0"]))
     }
 
     fun get(level: Int): GameLevel {

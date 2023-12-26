@@ -89,6 +89,14 @@ class SnakeGame(context: Context) : Game<Scene>(context) {
                                         println("Player to remove: $data")
                                         snakes.remove(data.id)
                                     }
+                                    is AppleEaten -> {
+                                        val data = packet.data
+                                        println("Apple eaten: $data")
+                                        snakes[data.playerId]!!.score += 1
+                                        //удалить съевшееся
+                                        level!!.apples.clear()
+                                        level!!.apples.add(data.newApple!!)
+                                    }
                                 }
                             }
                             is Frame.Close -> TODO()
@@ -138,6 +146,7 @@ class SnakeGame(context: Context) : Game<Scene>(context) {
             snakes = level!!.getSnakes()
             fontCache = BitmapFontCache(ResourceManager.pixelFont)
             if (!f){
+                level!!.apples.add(Vec2i(6, 14))
                 ResourceManager.backSound.play(volume = 0.3f, loop = true)
                 KtScope.launch {
                     client.ws(
@@ -158,6 +167,14 @@ class SnakeGame(context: Context) : Game<Scene>(context) {
                 }
                 lastSnakeHead = snakes[snakeId]!!.head
             }
+            //then apple is eaten, send packet with playerId and new apple
+            if (level!!.lastApple != null){
+                KtScope.launch {
+                    session?.send(json.encodeToString(Packet( AppleEaten(snakeId, level!!.lastApple))))
+                }
+                println(json.encodeToString(Packet( AppleEaten(snakeId, level!!.lastApple))))
+                level!!.lastApple = null
+            }
             //render
             gl.clearColor(Color.CLEAR)
             gl.clear(ClearBufferMask.COLOR_BUFFER_BIT)
@@ -166,13 +183,17 @@ class SnakeGame(context: Context) : Game<Scene>(context) {
             fontCache.setText("", 0f, 5f, scaleX = 1f, scaleY = 1f)
 
             batch.use(camera.viewProjection) {
-                level?.getLevel()?.render(it, camera)
+                level!!.getLevel().render(it, camera)
                 for (snake in snakes){
                     snake.value.render(it)
                     fontCache.addText("Snake ${snake.key + 1} score: ${snakes[snake.key]?.score}",
                         10f + 200f * snake.key, 5f, scaleX = 1.5f, scaleY = 1.5f)
                 }
                 fontCache.draw(it)
+                level!!.apples.forEach{
+                    batch.draw(ResourceManager.appleTexture,
+                        x = it.x * 16f, y = it.y * 16f, width = 16f, height = 16f)
+                }
 
             }
         }

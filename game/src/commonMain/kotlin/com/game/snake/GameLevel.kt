@@ -10,9 +10,12 @@ class GameLevel(level: LDtkLevel){
     private val collisionMask: LDtkIntGridLayer
     private val tiles: LDtkLayer
     private val snakes = HashMap<Int, SnakeEntity>()
+    var lastApple: Vec2i?
+    val apples = ArrayList<Vec2i>()
 
     init {
         this.level = level
+        lastApple = null
         this.collisionMask = level["Colliders"] as LDtkIntGridLayer
         tiles = level["Tiles"]
         prepareSnakes()
@@ -49,6 +52,15 @@ class GameLevel(level: LDtkLevel){
         return false
     }
 
+    fun isCollidingApple(point:Vec2i): Boolean{
+        apples.forEach {
+            if (it.x == point.x && it.y == point.y){
+                return true
+            }
+        }
+        return false
+    }
+
     private fun isCollidingWalls(point: Vec2i): Boolean{
         return !collisionMask.isCoordValid(point.x, point.y)
                 || collisionMask.getInt(point.x, point.y) == 1
@@ -64,5 +76,25 @@ class GameLevel(level: LDtkLevel){
 
     fun getSnakes(): HashMap<Int, SnakeEntity>{
         return snakes
+    }
+
+    fun addApple(){
+        var x = (0..collisionMask.gridWidth - 1).random()
+        var y = (5..collisionMask.gridHeight - 1).random()
+        while (isColliding(Vec2i(x,y), 0)){
+            x = (0..collisionMask.gridWidth).random()
+            y = (0..collisionMask.gridHeight).random()
+        }
+        apples.add(Vec2i(x,y))
+        lastApple = Vec2i(x,y)
+    }
+
+    fun removeApple(point: Vec2i){
+        var apple = Vec2i(0,0)
+        apples.forEach {
+            if (it.x == point.x && it.y == point.y)
+                apple = it
+        }
+        apples.remove(apple)
     }
 }

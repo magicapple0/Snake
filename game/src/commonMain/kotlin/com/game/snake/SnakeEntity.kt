@@ -3,13 +3,13 @@ package com.game.snake
 import com.lehaine.littlekt.graphics.Texture
 import com.lehaine.littlekt.graphics.g2d.Batch
 import com.lehaine.littlekt.math.Vec2i
-import com.lehaine.littlekt.math.geom.Angle
 
 class SnakeEntity(id: Int , level: GameLevel){
     private val id: Int
     private val util = Util()
     private var tailTexture: Texture
     private var headTexture: Texture
+    var addTail = false
     var score = 0
     //from end to head
     private var snakeBody: ArrayList<Vec2i> = arrayListOf()
@@ -26,6 +26,11 @@ class SnakeEntity(id: Int , level: GameLevel){
 
     fun update(level: GameLevel) {
         snakeBody.forEach {
+            if (level.isCollidingApple(Vec2i(it.x, it.y + 1))) {
+                level.addApple()
+                level.removeApple(Vec2i(it.x, it.y + 1))
+                addTail = true
+            }
             if (level.isColliding(Vec2i(it.x, it.y + 1), id))
                 return
         }
@@ -39,12 +44,25 @@ class SnakeEntity(id: Int , level: GameLevel){
             level.isColliding(Vec2i(snakeBody[snakeBody.size - 1].x + vec.x, snakeBody[snakeBody.size - 1].y + vec.y), id) ||
             snakeBody.contains(Vec2i(snakeBody[snakeBody.size - 1].x + vec.x, snakeBody[snakeBody.size - 1].y + vec.y))                    )
             return
+
+        val newHead = Vec2i(snakeBody[snakeBody.size - 1].x + vec.x, snakeBody[snakeBody.size - 1].y + vec.y)
+        if (addTail){
+            snakeBody.add(newHead)
+            addTail = false
+            return
+        }
         var i = 0
         while(i < snakeBody.size - 1) {
             snakeBody[i] = snakeBody[i + 1]
             i += 1
         }
-        snakeBody[i] = Vec2i(snakeBody[i].x + vec.x, snakeBody[i].y + vec.y)
+        snakeBody[i] = newHead
+        if (level.isCollidingApple(newHead)) {
+            level.addApple()
+            level.removeApple(newHead)
+            addTail = true
+        }
+
     }
 
     fun move(dir: Direction, level: GameLevel) {

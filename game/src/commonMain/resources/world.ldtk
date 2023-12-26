@@ -11,7 +11,7 @@
 	"iid": "cd1f6170-8990-11ee-9556-851dc22899ed",
 	"jsonVersion": "1.4.1",
 	"appBuildId": 471015,
-	"nextUid": 25,
+	"nextUid": 26,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -235,6 +235,40 @@
 					"tilesetUid": null
 				}
 			]
+		},
+		{
+			"identifier": "Apple",
+			"uid": 25,
+			"tags": [],
+			"exportToToc": false,
+			"doc": null,
+			"width": 16,
+			"height": 16,
+			"resizableX": false,
+			"resizableY": false,
+			"minWidth": null,
+			"maxWidth": null,
+			"minHeight": null,
+			"maxHeight": null,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
+			"color": "#BE4A2F",
+			"renderMode": "Rectangle",
+			"showName": true,
+			"tilesetId": null,
+			"tileRenderMode": "FitInside",
+			"tileRect": null,
+			"uiTileRect": null,
+			"nineSliceBorders": [],
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0,
+			"pivotY": 0,
+			"fieldDefs": []
 		}
 	], "tilesets": [
 		{
@@ -254,10 +288,7 @@
 			"enumTags": [],
 			"customData": [],
 			"savedSelections": [],
-			"cachedPixelData": {
-				"opaqueTiles": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
-				"averageColors": "f4eff4eff4eff4eff5eff7eff5eff5eff5eff6eff6eff6eff6eff5eff6eff6eff6eff6eff6eff7eff7eff6eff5eff4eff5eff7eff7eff6eff6eff7eff8eff7eff5eff6eff7eff7eff5eff6eff7eff7eff6eff7eff9eff7eff7eff7eff5eff4eff5eff8eff9eff9eff8eff7eff6eff8eff9eff7eff6eff9eff8eff8eff8effceffbeff8eff6eff8eff9eff9eff7eff4eff6eff8eff8eff8eff7eff8eff8eff9eff9eff7eff8eff7eff8effaeffceffceffceffceff9eff8eff7eff8eff6eff4eff5eff8effbeffbeff8eff7effceffceffceffbeff9effaeffbeffceffceffceffceffbeffbeffceffbeffceff9eff4eff8effceffceffceffceffbeffceffceffceffceffceffceffceffdeffceffbeffbeffceffceffceffbeffbeffbeff6effbeffceffceffceffbeffceffceffbeffceffbeffceffceffceffbeffbeffbeffbeffbeffbeffbeffbeffbeffbeffbeff6eef6eef6eef5eef6eef6eef6eef5eef6eef6eef6eef5eef6eef6eef6eef5eef6eef6eef6eef5eef6eef6eef6eef5eef3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3cff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bff3bf"
-			}
+			"cachedPixelData": null
 		},
 		{
 			"__cWid": 25,
@@ -450,6 +481,22 @@
 									"params": ["0,11"]
 								}
 							] }]
+						},
+						{
+							"__identifier": "Apple",
+							"__grid": [12,11],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"__worldX": 192,
+							"__worldY": 176,
+							"iid": "3f3fb360-8990-11ee-8416-01e0009deb62",
+							"width": 16,
+							"height": 16,
+							"defUid": 25,
+							"px": [192,176],
+							"fieldInstances": []
 						}
 					]
 				},

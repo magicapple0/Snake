@@ -2,6 +2,7 @@ package com.game.server.plugins
 
 import com.game.server.PlayerConnection
 import com.game.snake.*
+import com.lehaine.littlekt.math.Vec2i
 import io.ktor.websocket.*
 import java.time.*
 import io.ktor.server.application.*
@@ -46,6 +47,7 @@ fun Application.configureSockets() {
                         is Frame.Text -> {
                             val text = frame.readText()
                             val packet = json.decodeFromStringOrNull<Packet>(text)
+                            println("1 " + json.decodeFromStringOrNull<Packet>(text))
                             if (packet == null) {
                                 println("Got frame: $text")
                                 continue
@@ -57,6 +59,13 @@ fun Application.configureSockets() {
                                     playerConnections.asSequence().filter {
                                         it.key != playerConnection.id
                                     }.forEach {
+                                        it.value.session.send(text)
+                                    }
+                                }
+
+                                is AppleEaten ->{
+                                    playerConnection.apple = packet.data as AppleEaten
+                                    playerConnections.asSequence().forEach {
                                         it.value.session.send(text)
                                     }
                                 }

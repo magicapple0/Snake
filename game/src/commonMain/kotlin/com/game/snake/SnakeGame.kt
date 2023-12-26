@@ -11,6 +11,8 @@ import com.lehaine.littlekt.graphics.gl.ClearBufferMask
 import com.lehaine.littlekt.input.Key
 import com.lehaine.littlekt.math.Vec2i
 import com.lehaine.littlekt.util.viewport.ExtendViewport
+import com .lehaine.littlekt.audio.AudioClip
+import com.lehaine.littlekt.file.vfs.readAudioClip
 
 class SnakeGame(context: Context) : com.lehaine.littlekt.Game<Scene>(context) {
 
@@ -25,19 +27,42 @@ class SnakeGame(context: Context) : com.lehaine.littlekt.Game<Scene>(context) {
         levels.prepareLevels()
         val level = levels.get(0)
         val snake = SnakeEntity(level.getSnakeSpawn(0), snakeTexture, snakeHead, level)
-
-
+        val clip: AudioClip = resourcesVfs["move.mp3"].readAudioClip()
         input.inputProcessor {
             onKeyDown {
                 key -> when(key){
-                    Key.ARROW_LEFT -> snake.move(Direction.LEFT)
-                    Key.ARROW_UP -> snake.move(Direction.UP)
-                    Key.ARROW_RIGHT -> snake.move(Direction.RIGHT)
-                    Key.ARROW_DOWN -> snake.move(Direction.DOWN)
-                    Key.A -> snake.move(Direction.LEFT)
-                    Key.D -> snake.move(Direction.RIGHT)
-                    Key.S -> snake.move(Direction.DOWN)
-                    Key.W -> snake.move(Direction.UP)
+                    Key.ARROW_LEFT -> {
+                        snake.move(Direction.LEFT)
+                        clip.play(volume = 0.5f, loop = false)
+                    }
+                    Key.ARROW_UP -> {
+                        snake.move(Direction.UP)
+                        clip.play(volume = 0.5f, loop = false)
+                    }
+                    Key.ARROW_RIGHT -> {
+                        snake.move(Direction.RIGHT)
+                        clip.play(volume = 0.5f, loop = false)
+                    }
+                    Key.ARROW_DOWN ->{
+                        snake.move(Direction.DOWN)
+                        clip.play(volume = 0.5f, loop = false)
+                    }
+                    Key.A ->{
+                        snake.move(Direction.LEFT)
+                        clip.play(volume = 0.5f, loop = false)
+                    }
+                    Key.D -> {
+                        snake.move(Direction.RIGHT)
+                        clip.play(volume = 0.5f, loop = false)
+                    }
+                    Key.S -> {
+                        snake.move(Direction.DOWN)
+                        clip.play(volume = 0.5f, loop = false)
+                    }
+                    Key.W -> {
+                        snake.move(Direction.UP)
+                        clip.play(volume = 0.5f, loop = false)
+                    }
                     else -> return@onKeyDown
                 }
                 logger.info { snake.getBody() }

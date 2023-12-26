@@ -1,43 +1,42 @@
 package com.game.snake
 
-import com.lehaine.littlekt.file.vfs.readLDtkMapLoader
 import com.lehaine.littlekt.graphics.Texture
 import com.lehaine.littlekt.graphics.g2d.Batch
 import com.lehaine.littlekt.math.Vec2i
 import com.lehaine.littlekt.math.geom.Angle
 
-class SnakeEntity(id: Int, levelId: Int){//, snakeBody: ArrayList<Vec2i>, tailTexture: Texture, headTexture: Texture, level: GameLevel) {
+class SnakeEntity(id: Int , level: GameLevel){
     private val id: Int
-    private val tailTexture: Texture
-    private val headTexture: Texture
+    private var tailTexture: Texture
+    private var headTexture: Texture
     //from end to head
     private var snakeBody: ArrayList<Vec2i> = arrayListOf()
     private var headRotation: Angle = Angle.fromDegrees(270)
     //head rotation point is left bottom point. So rotation breaks head
     private var headOffset: Vec2i = Vec2i(0, 1)
-    private val level: GameLevel
+    var head: Vec2i get() = snakeBody[snakeBody.size - 1]
 
     init{
         this.id = id
-        this.level = GameLevel(ResourceManager.world["Level_0"])
         this.tailTexture = ResourceManager.tailTexture
         this.headTexture = ResourceManager.headTexture
         this.snakeBody = level.getSnakeSpawn(id)
+        head = snakeBody[snakeBody.size - 1]
     }
 
-    fun update() {
+    fun update(level: GameLevel) {
         snakeBody.forEach {
-            if (level.isColliding(Vec2i(it.x, it.y + 1)))
+            if (level.isColliding(Vec2i(it.x, it.y + 1), id))
                 return
         }
         for (i in 0..<snakeBody.size)
             snakeBody[i] = Vec2i(snakeBody[i].x, snakeBody[i].y + 1)
     }
 
-    private fun moveBody(vec: Vec2i){
+    private fun moveBody(vec: Vec2i, level: GameLevel){
         if ((snakeBody[snakeBody.size - 1].y + vec.y == snakeBody[snakeBody.size - 2].y &&
             snakeBody[snakeBody.size - 1].x + vec.x == snakeBody[snakeBody.size - 2].x) ||
-            level.isColliding(Vec2i(snakeBody[snakeBody.size - 1].x + vec.x, snakeBody[snakeBody.size - 1].y + vec.y)) ||
+            level.isColliding(Vec2i(snakeBody[snakeBody.size - 1].x + vec.x, snakeBody[snakeBody.size - 1].y + vec.y), id) ||
             snakeBody.contains(Vec2i(snakeBody[snakeBody.size - 1].x + vec.x, snakeBody[snakeBody.size - 1].y + vec.y))                    )
             return
         var i = 0
@@ -48,28 +47,28 @@ class SnakeEntity(id: Int, levelId: Int){//, snakeBody: ArrayList<Vec2i>, tailTe
         snakeBody[i] = Vec2i(snakeBody[i].x + vec.x, snakeBody[i].y + vec.y)
     }
 
-    fun move(dir: Direction) {
+    fun move(dir: Direction, level: GameLevel) {
         when (dir){
             Direction.UP -> {
-                moveBody(Vec2i(0, -1))
+                moveBody(Vec2i(0, -1), level)
                 headRotation = Angle.fromDegrees(180)
                 headOffset = Vec2i(1, 1)
                 return
             }
             Direction.DOWN -> {
-                moveBody(Vec2i(0, 1))
+                moveBody(Vec2i(0, 1), level)
                 headRotation = Angle.fromDegrees(0)
                 headOffset = Vec2i(0, 0)
                 return
             }
             Direction.RIGHT -> {
-                moveBody(Vec2i(1, 0))
+                moveBody(Vec2i(1, 0), level)
                 headRotation = Angle.fromDegrees(270)
                 headOffset = Vec2i(0, 1)
                 return
             }
             Direction.LEFT -> {
-                moveBody(Vec2i(-1, 0))
+                moveBody(Vec2i(-1, 0), level)
                 headRotation = Angle.fromDegrees(90)
                 headOffset = Vec2i(1, 0)
                 return
@@ -88,5 +87,13 @@ class SnakeEntity(id: Int, levelId: Int){//, snakeBody: ArrayList<Vec2i>, tailTe
 
     fun getBody(): List<Vec2i>{
         return snakeBody
+    }
+
+    fun toPlayer(): Player {
+        return Player(id, snakeBody)
+    }
+
+    fun move(snakeBody: ArrayList<Vec2i>) {
+        this.snakeBody = snakeBody
     }
 }

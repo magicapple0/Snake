@@ -5,10 +5,11 @@ import com.lehaine.littlekt.math.Vec2i
 import com.lehaine.littlekt.math.geom.Point
 
 class GameLevel(level: LDtkLevel){
-    val level: LDtkLevel
-    val snakesSpawn: ArrayList<ArrayList<Vec2i>> = ArrayList()
-    val collisionMask: LDtkIntGridLayer
-    val tiles: LDtkLayer
+    private val level: LDtkLevel
+    private val snakesSpawn: ArrayList<ArrayList<Vec2i>> = ArrayList()
+    private val collisionMask: LDtkIntGridLayer
+    private val tiles: LDtkLayer
+    private val snakes = HashMap<Int, SnakeEntity>()
 
     init {
         this.level = level
@@ -18,7 +19,9 @@ class GameLevel(level: LDtkLevel){
     }
 
     private fun prepareSnakes(){
-        val snake = level.entities("Snake")[0].fieldArray<Point>("Body").values
+        var snake = level.entities("Snake")[0].fieldArray<Point>("Body").values
+        snakesSpawn.add(convertLdtkPointToVec2i(snake))
+        snake = level.entities("Snake")[1].fieldArray<Point>("Body").values
         snakesSpawn.add(convertLdtkPointToVec2i(snake))
     }
 
@@ -31,13 +34,35 @@ class GameLevel(level: LDtkLevel){
         return vecList.reversed() as ArrayList<Vec2i>
     }
 
+    fun isColliding(point: Vec2i, id: Int): Boolean{
+        return isCollidingSnakes(point, id) || isCollidingWalls(point)
+    }
 
-    fun isColliding(point: Vec2i): Boolean{
-        var x = collisionMask.intGrid
+    private fun isCollidingSnakes(point:Vec2i, id: Int): Boolean{
+        snakes.forEach{ it ->
+            if (it.key != id)
+                it.value.getBody().forEach {
+                    if (it.y == point.y && it.x == point.x)
+                        return true
+                }
+        }
+        return false
+    }
+
+    private fun isCollidingWalls(point: Vec2i): Boolean{
         return !collisionMask.isCoordValid(point.x, point.y)
                 || collisionMask.getInt(point.x, point.y) == 1
     }
+
     fun getSnakeSpawn(snake: Int): ArrayList<Vec2i>{
         return snakesSpawn[snake]
+    }
+
+    fun getLevel(): LDtkLevel{
+        return level
+    }
+
+    fun getSnakes(): HashMap<Int, SnakeEntity>{
+        return snakes
     }
 }

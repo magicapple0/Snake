@@ -5,7 +5,6 @@ import com.lehaine.littlekt.Context
 import com.lehaine.littlekt.Disposable
 import com.lehaine.littlekt.file.ldtk.LDtkMapLoader
 import com.lehaine.littlekt.graphics.Texture
-import com.lehaine.littlekt.graphics.g2d.TextureAtlas
 import com.lehaine.littlekt.graphics.g2d.tilemap.ldtk.LDtkWorld
 import kotlin.jvm.Volatile
 
@@ -34,12 +33,25 @@ class ResourceManager private constructor(context: Context) : Disposable {
             val newInstance = ResourceManager(context)
             instance = newInstance
             INSTANCE.assets.onFullyLoaded = onLoad
+//            context.onRender {
+//                while(!INSTANCE.assets.prepared) {
+//                    INSTANCE.assets.update()
+//                }
+//            }
             context.onRender { INSTANCE.assets.update() }
             return newInstance
         }
 
         fun dispose() {
             instance?.dispose()
+        }
+
+        fun update() {
+            instance?.assets?.update()
+        }
+
+        fun isReady(): Boolean{
+            return INSTANCE.assets.fullyLoaded
         }
     }
 }

@@ -117,6 +117,7 @@ class SnakeGame(context: Context) : Game<Scene>(context) {
                     Key.W -> level?.let { snakes[snakeId]!!.move(Direction.UP, it) }
                     else -> return@onKeyDown
             }
+                ResourceManager.stepSound.play(volume = 0.5f, loop = false)
                 logger.info { snakes[snakeId]!!.getBody() }
             }
         }
@@ -137,6 +138,7 @@ class SnakeGame(context: Context) : Game<Scene>(context) {
             snakes = level!!.getSnakes()
             fontCache = BitmapFontCache(ResourceManager.pixelFont)
             if (!f){
+                ResourceManager.backSound.play(volume = 0.3f, loop = true)
                 KtScope.launch {
                     client.ws(
                         method = HttpMethod.Get,

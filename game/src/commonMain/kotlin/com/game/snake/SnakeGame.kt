@@ -72,7 +72,7 @@ class SnakeGame(context: Context) : Game<Scene>(context) {
                                         val player = packet.data
                                         if (snakes.containsKey(player.id)) {
                                             context.logger.info { "1 " + player.id }
-                                            snakes[player.id]!!.move(player.snakeBody)
+                                            snakes[player.id]!!.move(player.snakeBody, player.headDirection)
                                         } else {
                                             context.logger.info { "2 " + player.id }
                                             snakeId = player.id

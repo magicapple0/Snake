@@ -7,14 +7,13 @@ import com.lehaine.littlekt.math.geom.Angle
 
 class SnakeEntity(id: Int , level: GameLevel){
     private val id: Int
+    private val util = Util()
     private var tailTexture: Texture
     private var headTexture: Texture
-    public var score = 0
+    var score = 0
     //from end to head
     private var snakeBody: ArrayList<Vec2i> = arrayListOf()
-    private var headRotation: Angle = Angle.fromDegrees(270)
-    //head rotation point is left bottom point. So rotation breaks head
-    private var headOffset: Vec2i = Vec2i(0, 1)
+    private var headDirection = Direction.RIGHT
     var head: Vec2i get() = snakeBody[snakeBody.size - 1]
 
     init{
@@ -52,26 +51,22 @@ class SnakeEntity(id: Int , level: GameLevel){
         when (dir){
             Direction.UP -> {
                 moveBody(Vec2i(0, -1), level)
-                headRotation = Angle.fromDegrees(180)
-                headOffset = Vec2i(1, 1)
+                headDirection = Direction.UP
                 return
             }
             Direction.DOWN -> {
                 moveBody(Vec2i(0, 1), level)
-                headRotation = Angle.fromDegrees(0)
-                headOffset = Vec2i(0, 0)
+                headDirection = Direction.DOWN
                 return
             }
             Direction.RIGHT -> {
                 moveBody(Vec2i(1, 0), level)
-                headRotation = Angle.fromDegrees(270)
-                headOffset = Vec2i(0, 1)
+                headDirection = Direction.RIGHT
                 return
             }
             Direction.LEFT -> {
                 moveBody(Vec2i(-1, 0), level)
-                headRotation = Angle.fromDegrees(90)
-                headOffset = Vec2i(1, 0)
+                headDirection = Direction.LEFT
                 return
             }
             else -> return
@@ -80,6 +75,8 @@ class SnakeEntity(id: Int , level: GameLevel){
 
     fun render(batch: Batch) {
         val snakeSize = snakeBody.size
+        val headRotation = util.headRotation[headDirection]!!
+        val headOffset = util.headOffset[headDirection]!!
         for (i in 0..<snakeSize - 1)
             batch.draw(tailTexture, x = snakeBody[i].x * 16f, y = snakeBody[i].y * 16f, width = 16f, height = 16f)
         batch.draw(headTexture, x = snakeBody[snakeSize - 1].x * 16f + 16f * headOffset.x,
@@ -91,10 +88,11 @@ class SnakeEntity(id: Int , level: GameLevel){
     }
 
     fun toPlayer(): Player {
-        return Player(id, snakeBody)
+        return Player(id, snakeBody, headDirection)
     }
 
-    fun move(snakeBody: ArrayList<Vec2i>) {
+    fun move(snakeBody: ArrayList<Vec2i>, headDirection: Direction) {
         this.snakeBody = snakeBody
+        this.headDirection = headDirection
     }
 }

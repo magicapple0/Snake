@@ -15,7 +15,8 @@ data class Packet(
 )
 
 @Serializable
-data class Player(val id: Int, var snakeBody: ArrayList<@Serializable(Vec2iSerializer::class)Vec2i>) : PacketData()
+data class Player(val id: Int, var snakeBody: ArrayList<@Serializable(Vec2iSerializer::class)Vec2i>,
+                  val headDirection: Direction) : PacketData()
 
 @Serializable
 data class PlayerRemoved(val id: Int) : PacketData()

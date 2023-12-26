@@ -9,6 +9,7 @@ class SnakeEntity(id: Int , level: GameLevel){
     private val id: Int
     private var tailTexture: Texture
     private var headTexture: Texture
+    public var score = 0
     //from end to head
     private var snakeBody: ArrayList<Vec2i> = arrayListOf()
     private var headRotation: Angle = Angle.fromDegrees(270)

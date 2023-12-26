@@ -4,6 +4,7 @@ import com.lehaine.littlekt.*
 import com.lehaine.littlekt.async.KtScope
 import com.lehaine.littlekt.graphics.Color
 import com.lehaine.littlekt.graphics.g2d.SpriteBatch
+import com.lehaine.littlekt.graphics.g2d.font.BitmapFontCache
 import com.lehaine.littlekt.graphics.g2d.use
 import com.lehaine.littlekt.graphics.gl.ClearBufferMask
 import com.lehaine.littlekt.input.Key
@@ -34,6 +35,7 @@ class SnakeGame(context: Context) : Game<Scene>(context) {
         var snakeId = 0
         val levelId = 0
         var lastSnakeHead = Vec2i(0, 0)
+        var fontCache: BitmapFontCache
         ResourceManager.createInstance(this) {
             level = GameLevel(ResourceManager.world["Level_$levelId"])
         }
@@ -133,6 +135,7 @@ class SnakeGame(context: Context) : Game<Scene>(context) {
             }
             //start session
             snakes = level!!.getSnakes()
+            fontCache = BitmapFontCache(ResourceManager.pixelFont)
             if (!f){
                 KtScope.launch {
                     client.ws(
@@ -157,11 +160,18 @@ class SnakeGame(context: Context) : Game<Scene>(context) {
             gl.clearColor(Color.CLEAR)
             gl.clear(ClearBufferMask.COLOR_BUFFER_BIT)
             level?.let { it1 -> snakes[snakeId]?.update(it1) }
+
+            fontCache.setText("", 0f, 5f, scaleX = 1f, scaleY = 1f)
+
             batch.use(camera.viewProjection) {
                 level?.getLevel()?.render(it, camera)
-                for (snake in snakes.values){
-                    snake.render(it)
+                for (snake in snakes){
+                    snake.value.render(it)
+                    fontCache.addText("Snake ${snake.key + 1} score: ${snakes[snake.key]?.score}",
+                        10f + 200f * snake.key, 5f, scaleX = 1.5f, scaleY = 1.5f)
                 }
+                fontCache.draw(it)
+
             }
         }
 
